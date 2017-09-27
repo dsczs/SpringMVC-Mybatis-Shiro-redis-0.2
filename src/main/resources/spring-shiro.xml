@@ -45,7 +45,6 @@
         <property name="cookie" ref="rememberMeCookie"/>
     </bean>
 
-
     <!-- custom shiro session listener -->
     <bean id="customShiroSessionDAO" class="com.sojson.core.shiro.CustomShiroSessionDAO">
         <property name="shiroSessionRepository" ref="jedisShiroSessionRepository"/>
@@ -98,10 +97,8 @@
         <property name="arguments" ref="jedisShiroSessionRepository"/>
     </bean>
 
-
     <!-- 授权 认证 -->
     <bean id="sampleRealm" class="com.sojson.core.shiro.token.SampleRealm"></bean>
-
 
     <!-- Session Manager -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
@@ -178,7 +175,6 @@
     </bean>
     <!-- Shiro生命周期处理器-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
-
 
     <!-- ============================================================================ -->
 
