@@ -16,18 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
-/**
- * 开发公司：itboy.net<br/>
- * 版权：itboy.net<br/>
- * 用户权限管理
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2016年5月26日 　<br/>
- * *******
- *
- * @author zhou-baicheng
- * @version 1.0, 2016年5月26日 <br/>
- * @email i@itboy.net
- */
 @Controller
 @Scope(value = "prototype")
 @RequestMapping("permission")

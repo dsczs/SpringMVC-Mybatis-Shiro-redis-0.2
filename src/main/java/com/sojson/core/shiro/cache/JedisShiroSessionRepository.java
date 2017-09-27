@@ -12,8 +12,6 @@ import java.util.Collection;
 
 /**
  * Session 管理
- *
- * @author sojson.com
  */
 @SuppressWarnings("unchecked")
 public class JedisShiroSessionRepository implements ShiroSessionRepository

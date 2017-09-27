@@ -7,9 +7,6 @@ import java.io.OutputStream;
  * <p>
  * 验证码抽象类,暂时不支持中文
  * </p>
- *
- * @author: wuhongjun
- * @version:1.0
  */
 public abstract class Captcha extends Randoms
 {

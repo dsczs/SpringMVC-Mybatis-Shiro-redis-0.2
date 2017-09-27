@@ -10,18 +10,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-/**
- * 开发公司：itboy.net<br/>
- * 版权：itboy.net<br/>
- * Shiro Filter 工具类
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2016年5月27日 　<br/>
- * *******
- *
- * @author zhou-baicheng
- * @version 1.0, 2016年5月27日 <br/>
- * @email i@itboy.net
- */
 public class ShiroFilterUtils
 {
     final static Class<? extends ShiroFilterUtils> CLAZZ = ShiroFilterUtils.class;

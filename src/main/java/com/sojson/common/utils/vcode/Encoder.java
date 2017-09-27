@@ -3,10 +3,6 @@ package com.sojson.common.utils.vcode;
 import java.io.IOException;
 import java.io.OutputStream;
 
-/**
- * @author: wuhongjun
- * @version:1.0
- */
 public class Encoder
 {
     static final int BITS = 12;

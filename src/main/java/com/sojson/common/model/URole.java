@@ -6,18 +6,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * 开发公司：itboy.net<br/>
- * 版权：itboy.net<br/>
- * 权限角色
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2016年5月25日 　<br/>
- * *******
- *
- * @author zhou-baicheng
- * @version 1.0, 2016年5月25日 <br/>
- * @email i@itboy.net
- */
 public class URole implements Serializable
 {
     private static final long serialVersionUID = 1L;

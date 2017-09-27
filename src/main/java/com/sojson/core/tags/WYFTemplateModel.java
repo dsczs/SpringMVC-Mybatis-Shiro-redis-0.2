@@ -7,17 +7,6 @@ import freemarker.template.*;
 import java.io.IOException;
 import java.util.Map;
 
-/**
- * 开发公司：WENYIFAN.NET <br/>
- * 版权：WENYIFAN.NET <br/>
- * 基础标签类
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2014年4月28日 　<br/>
- * *******
- *
- * @author zhou-baicheng
- * @version 1.0, 2014年4月28日 <br/>
- */
 @SuppressWarnings("unchecked")
 public abstract class WYFTemplateModel implements TemplateDirectiveModel
 {

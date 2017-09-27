@@ -5,18 +5,6 @@ import net.sf.json.JSONObject;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 开发公司：itboy.net<br/>
- * 版权：itboy.net<br/>
- * 用户
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2016年5月25日 　<br/>
- * *******
- *
- * @author zhou-baicheng
- * @version 1.0, 2016年5月25日 <br/>
- * @email i@itboy.net
- */
 public class UUser implements Serializable
 {
     //0:禁止登录

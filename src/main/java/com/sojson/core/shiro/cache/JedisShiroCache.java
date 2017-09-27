@@ -8,18 +8,6 @@ import org.apache.shiro.cache.CacheException;
 import java.util.Collection;
 import java.util.Set;
 
-/**
- * 开发公司：sojson.com<br/>
- * 版权：sojson.com<br/>
- * 缓存获取Manager
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2016年4月29日 　<br/>
- * *******
- *
- * @author zhou-baicheng
- * @version 1.0, 2016年4月29日 <br/>
- * @email json@sojson.com
- */
 @SuppressWarnings("unchecked")
 public class JedisShiroCache<K, V> implements Cache<K, V>
 {

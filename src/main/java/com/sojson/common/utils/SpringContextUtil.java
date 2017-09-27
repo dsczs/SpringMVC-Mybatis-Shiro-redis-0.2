@@ -5,18 +5,6 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-/**
- * 开发公司：itboy.net<br/>
- * 版权：itboy.net<br/>
- * 静态获取Bean
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2016年4月4日 　<br/>
- * *******
- *
- * @author zhou-baicheng
- * @version 1.0, 2016年4月4日 <br/>
- * @email i@itboy.net
- */
 public class SpringContextUtil implements ApplicationContextAware
 {
     private static ApplicationContext applicationContext;

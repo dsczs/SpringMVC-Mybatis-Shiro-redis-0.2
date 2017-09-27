@@ -11,17 +11,6 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.Map.Entry;
 
-/**
- * 开发公司：itboy.net<br/>
- * 版权：itboy.net<br/>
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2016年5月3日 　<br/>
- * *******
- *
- * @author zhou-baicheng
- * @version 1.0, 2016年5月3日 <br/>
- * @email i@itboy.net
- */
 public class BaseController
 {
 

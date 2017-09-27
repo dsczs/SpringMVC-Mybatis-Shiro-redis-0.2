@@ -4,18 +4,6 @@ import com.sojson.core.shiro.session.ShiroSessionRepository;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;
 
-/**
- * 开发公司：SOJSON在线工具 <p>
- * 版权所有：© www.sojson.com<p>
- * 博客地址：http://www.sojson.com/blog/  <p>
- * shiro 回话 监听
- * 区分　责任人　日期　　　　说明<br/>
- * 创建　周柏成　2016年6月2日 　<br/>
- *
- * @author zhou-baicheng
- * @version 1.0, 2016年6月2日 <br/>
- * @email so@sojson.com
- */
 public class CustomSessionListener implements SessionListener
 {
 
