@@ -1,12 +1,13 @@
 package com.sojson.common.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import com.sojson.common.model.UUser;
 import com.sojson.permission.bo.URoleBo;
 
-public interface UUserMapper {
+import java.util.List;
+import java.util.Map;
+
+public interface UUserMapper
+{
     int deleteByPrimaryKey(Long id);
 
     int insert(UUser record);
@@ -19,10 +20,10 @@ public interface UUserMapper {
 
     int updateByPrimaryKey(UUser record);
 
-	UUser login(Map<String, Object> map);
+    UUser login(Map<String, Object> map);
 
-	UUser findUserByEmail(String email);
+    UUser findUserByEmail(String email);
 
-	List<URoleBo> selectRoleByUserId(Long id);
+    List<URoleBo> selectRoleByUserId(Long id);
 
 }

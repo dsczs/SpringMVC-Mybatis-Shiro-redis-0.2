@@ -3,11 +3,7 @@ package com.sojson.common.utils.vcode;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Class AnimatedGifEncoder - Encodes a GIF file consisting of one or
@@ -28,7 +24,6 @@ import java.io.OutputStream;
  *
  * @author wuhongjun
  * @version 1.03 November 2003
- *
  */
 public class GifEncoder
 {
@@ -59,7 +54,8 @@ public class GifEncoder
      *
      * @param ms int delay time in milliseconds
      */
-    public void setDelay(int ms) {
+    public void setDelay(int ms)
+    {
         delay = Math.round(ms / 10.0f);
     }
 
@@ -67,10 +63,13 @@ public class GifEncoder
      * Sets the GIF frame disposal code for the last added frame
      * and any subsequent frames.  Default is 0 if no transparent
      * color has been set, otherwise 2.
+     *
      * @param code int disposal code.
      */
-    public void setDispose(int code) {
-        if (code >= 0) {
+    public void setDispose(int code)
+    {
+        if (code >= 0)
+        {
             dispose = code;
         }
     }
@@ -84,8 +83,10 @@ public class GifEncoder
      * @param iter int number of iterations.
      * @return
      */
-    public void setRepeat(int iter) {
-        if (iter >= 0) {
+    public void setRepeat(int iter)
+    {
+        if (iter >= 0)
+        {
             repeat = iter;
         }
     }
@@ -101,7 +102,8 @@ public class GifEncoder
      *
      * @param c Color to be treated as transparent on display.
      */
-    public void setTransparent(Color c) {
+    public void setTransparent(Color c)
+    {
         transparent = c;
     }
 
@@ -115,35 +117,44 @@ public class GifEncoder
      * @param im BufferedImage containing frame to write.
      * @return true if successful.
      */
-    public boolean addFrame(BufferedImage im) {
-        if ((im == null) || !started) {
+    public boolean addFrame(BufferedImage im)
+    {
+        if ((im == null) || !started)
+        {
             return false;
         }
         boolean ok = true;
-        try {
-            if (!sizeSet) {
+        try
+        {
+            if (!sizeSet)
+            {
                 // use first frame's size
                 setSize(im.getWidth(), im.getHeight());
             }
             image = im;
             getImagePixels(); // convert to correct format if necessary
             analyzePixels(); // build color table & map pixels
-            if (firstFrame) {
+            if (firstFrame)
+            {
                 writeLSD(); // logical screen descriptior
                 writePalette(); // global color table
-                if (repeat >= 0) {
+                if (repeat >= 0)
+                {
                     // use NS app extension to indicate reps
                     writeNetscapeExt();
                 }
             }
             writeGraphicCtrlExt(); // write graphic control extension
             writeImageDesc(); // image descriptor
-            if (!firstFrame) {
+            if (!firstFrame)
+            {
                 writePalette(); // local color table
             }
             writePixels(); // encode and write pixel data
             firstFrame = false;
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             ok = false;
         }
 
@@ -151,19 +162,24 @@ public class GifEncoder
     }
 
     //added by alvaro
-    public boolean outFlush() {
+    public boolean outFlush()
+    {
         boolean ok = true;
-        try {
+        try
+        {
             out.flush();
             return ok;
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             ok = false;
         }
 
         return ok;
     }
 
-    public byte[] getFrameByteArray() {
+    public byte[] getFrameByteArray()
+    {
         return ((ByteArrayOutputStream) out).toByteArray();
     }
 
@@ -172,24 +188,31 @@ public class GifEncoder
      * If writing to an OutputStream, the stream is not
      * closed.
      */
-    public boolean finish() {
-        if (!started) return false;
+    public boolean finish()
+    {
+        if (!started)
+            return false;
         boolean ok = true;
         started = false;
-        try {
+        try
+        {
             out.write(0x3b); // gif trailer
             out.flush();
-            if (closeStream) {
+            if (closeStream)
+            {
                 out.close();
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             ok = false;
         }
 
         return ok;
     }
 
-    public void reset() {
+    public void reset()
+    {
         // reset for subsequent use
         transIndex = 0;
         out = null;
@@ -207,8 +230,10 @@ public class GifEncoder
      *
      * @param fps float frame rate (frames per second)
      */
-    public void setFrameRate(float fps) {
-        if (fps != 0f) {
+    public void setFrameRate(float fps)
+    {
+        if (fps != 0f)
+        {
             delay = Math.round(100f / fps);
         }
     }
@@ -224,8 +249,10 @@ public class GifEncoder
      * @param quality int greater than 0.
      * @return
      */
-    public void setQuality(int quality) {
-        if (quality < 1) quality = 1;
+    public void setQuality(int quality)
+    {
+        if (quality < 1)
+            quality = 1;
         sample = quality;
     }
 
@@ -237,12 +264,16 @@ public class GifEncoder
      * @param w int frame width.
      * @param h int frame width.
      */
-    public void setSize(int w, int h) {
-        if (started && !firstFrame) return;
+    public void setSize(int w, int h)
+    {
+        if (started && !firstFrame)
+            return;
         width = w;
         height = h;
-        if (width < 1) width = 320;
-        if (height < 1) height = 240;
+        if (width < 1)
+            width = 320;
+        if (height < 1)
+            height = 240;
         sizeSet = true;
     }
 
@@ -253,14 +284,19 @@ public class GifEncoder
      * @param os OutputStream on which GIF images are written.
      * @return false if initial write failed.
      */
-    public boolean start(OutputStream os) {
-        if (os == null) return false;
+    public boolean start(OutputStream os)
+    {
+        if (os == null)
+            return false;
         boolean ok = true;
         closeStream = false;
         out = os;
-        try {
+        try
+        {
             writeString("GIF89a"); // header
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             ok = false;
         }
         return started = ok;
@@ -272,13 +308,17 @@ public class GifEncoder
      * @param file String containing output file name.
      * @return false if open or initial write failed.
      */
-    public boolean start(String file) {
+    public boolean start(String file)
+    {
         boolean ok = true;
-        try {
+        try
+        {
             out = new BufferedOutputStream(new FileOutputStream(file));
             ok = start(out);
             closeStream = true;
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             ok = false;
         }
         return started = ok;
@@ -287,7 +327,8 @@ public class GifEncoder
     /**
      * Analyzes image colors and creates color map.
      */
-    protected void analyzePixels() {
+    protected void analyzePixels()
+    {
         int len = pixels.length;
         int nPix = len / 3;
         indexedPixels = new byte[nPix];
@@ -295,7 +336,8 @@ public class GifEncoder
         // initialize quantizer
         colorTab = nq.process(); // create reduced palette
         // convert map from BGR to RGB
-        for (int i = 0; i < colorTab.length; i += 3) {
+        for (int i = 0; i < colorTab.length; i += 3)
+        {
             byte temp = colorTab[i];
             colorTab[i] = colorTab[i + 2];
             colorTab[i + 2] = temp;
@@ -303,11 +345,9 @@ public class GifEncoder
         }
         // map image pixels to new palette
         int k = 0;
-        for (int i = 0; i < nPix; i++) {
-            int index =
-                    nq.map(pixels[k++] & 0xff,
-                            pixels[k++] & 0xff,
-                            pixels[k++] & 0xff);
+        for (int i = 0; i < nPix; i++)
+        {
+            int index = nq.map(pixels[k++] & 0xff, pixels[k++] & 0xff, pixels[k++] & 0xff);
             usedEntry[index] = true;
             indexedPixels[i] = (byte) index;
         }
@@ -315,30 +355,34 @@ public class GifEncoder
         colorDepth = 8;
         palSize = 7;
         // get closest match to transparent color if specified
-        if (transparent != null) {
+        if (transparent != null)
+        {
             transIndex = findClosest(transparent);
         }
     }
 
     /**
      * Returns index of palette color closest to c
-     *
      */
-    protected int findClosest(Color c) {
-        if (colorTab == null) return -1;
+    protected int findClosest(Color c)
+    {
+        if (colorTab == null)
+            return -1;
         int r = c.getRed();
         int g = c.getGreen();
         int b = c.getBlue();
         int minpos = 0;
         int dmin = 256 * 256 * 256;
         int len = colorTab.length;
-        for (int i = 0; i < len;) {
+        for (int i = 0; i < len; )
+        {
             int dr = r - (colorTab[i++] & 0xff);
             int dg = g - (colorTab[i++] & 0xff);
             int db = b - (colorTab[i] & 0xff);
             int d = dr * dr + dg * dg + db * db;
             int index = i / 3;
-            if (usedEntry[index] && (d < dmin)) {
+            if (usedEntry[index] && (d < dmin))
+            {
                 dmin = d;
                 minpos = index;
             }
@@ -350,16 +394,15 @@ public class GifEncoder
     /**
      * Extracts image pixels into byte array "pixels"
      */
-    protected void getImagePixels() {
+    protected void getImagePixels()
+    {
         int w = image.getWidth();
         int h = image.getHeight();
         int type = image.getType();
-        if ((w != width)
-                || (h != height)
-                || (type != BufferedImage.TYPE_3BYTE_BGR)) {
+        if ((w != width) || (h != height) || (type != BufferedImage.TYPE_3BYTE_BGR))
+        {
             // create new image with right size/format
-            BufferedImage temp =
-                    new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+            BufferedImage temp = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
             Graphics2D g = temp.createGraphics();
             g.drawImage(image, 0, 0, null);
             image = temp;
@@ -370,19 +413,24 @@ public class GifEncoder
     /**
      * Writes Graphic Control Extension
      */
-    protected void writeGraphicCtrlExt() throws IOException {
+    protected void writeGraphicCtrlExt() throws IOException
+    {
         out.write(0x21); // extension introducer
         out.write(0xf9); // GCE label
         out.write(4); // data block size
         int transp, disp;
-        if (transparent == null) {
+        if (transparent == null)
+        {
             transp = 0;
             disp = 0; // dispose = no action
-        } else {
+        }
+        else
+        {
             transp = 1;
             disp = 2; // force clear if using transparent color
         }
-        if (dispose >= 0) {
+        if (dispose >= 0)
+        {
             disp = dispose & 7; // user override
         }
         disp <<= 2;
@@ -401,17 +449,21 @@ public class GifEncoder
     /**
      * Writes Image Descriptor
      */
-    protected void writeImageDesc() throws IOException {
+    protected void writeImageDesc() throws IOException
+    {
         out.write(0x2c); // image separator
         writeShort(0); // image position x,y = 0,0
         writeShort(0);
         writeShort(width); // image size
         writeShort(height);
         // packed fields
-        if (firstFrame) {
+        if (firstFrame)
+        {
             // no LCT  - GCT is used for first (or only) frame
             out.write(0);
-        } else {
+        }
+        else
+        {
             // specify normal LCT
             out.write(0x80 | // 1 local color table  1=yes
                     0 | // 2 interlace - 0=no
@@ -424,7 +476,8 @@ public class GifEncoder
     /**
      * Writes Logical Screen Descriptor
      */
-    protected void writeLSD() throws IOException {
+    protected void writeLSD() throws IOException
+    {
         // logical screen size
         writeShort(width);
         writeShort(height);
@@ -442,7 +495,8 @@ public class GifEncoder
      * Writes Netscape application extension to define
      * repeat count.
      */
-    protected void writeNetscapeExt() throws IOException {
+    protected void writeNetscapeExt() throws IOException
+    {
         out.write(0x21); // extension introducer
         out.write(0xff); // app extension label
         out.write(11); // block size
@@ -456,10 +510,12 @@ public class GifEncoder
     /**
      * Writes color table
      */
-    protected void writePalette() throws IOException {
+    protected void writePalette() throws IOException
+    {
         out.write(colorTab, 0, colorTab.length);
         int n = (3 * 256) - colorTab.length;
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++)
+        {
             out.write(0);
         }
     }
@@ -467,15 +523,17 @@ public class GifEncoder
     /**
      * Encodes and writes pixel data
      */
-    protected void writePixels() throws IOException {
+    protected void writePixels() throws IOException
+    {
         Encoder encoder = new Encoder(width, height, indexedPixels, colorDepth);
         encoder.encode(out);
     }
 
     /**
-     *    Write 16-bit value to output stream, LSB first
+     * Write 16-bit value to output stream, LSB first
      */
-    protected void writeShort(int value) throws IOException {
+    protected void writeShort(int value) throws IOException
+    {
         out.write(value & 0xff);
         out.write((value >> 8) & 0xff);
     }
@@ -483,8 +541,10 @@ public class GifEncoder
     /**
      * Writes string to output stream
      */
-    protected void writeString(String s) throws IOException {
-        for (int i = 0; i < s.length(); i++) {
+    protected void writeString(String s) throws IOException
+    {
+        for (int i = 0; i < s.length(); i++)
+        {
             out.write((byte) s.charAt(i));
         }
     }

@@ -11,7 +11,7 @@ public class Quant
     protected static final int netsize = 256; /* number of colours used */
 
     /* four primes near 500 - assume no image has a length so large */
-	/* that it is divisible by all four primes */
+    /* that it is divisible by all four primes */
     protected static final int prime1 = 499;
     protected static final int prime2 = 491;
     protected static final int prime3 = 487;
@@ -46,8 +46,7 @@ public class Quant
     protected static final int gamma = (((int) 1) << gammashift);
     protected static final int betashift = 10;
     protected static final int beta = (intbias >> betashift); /* beta = 1/1024 */
-    protected static final int betagamma =
-            (intbias << (gammashift - betashift));
+    protected static final int betagamma = (intbias << (gammashift - betashift));
 
     /* defs for decreasing radius factor */
     protected static final int initrad = (netsize >> 3); /* for 256 cols, radius starts */
@@ -59,18 +58,15 @@ public class Quant
     /* defs for decreasing alpha factor */
     protected static final int alphabiasshift = 10; /* alpha starts at 1.0 */
     protected static final int initalpha = (((int) 1) << alphabiasshift);
-
-    protected int alphadec; /* biased by 10 bits */
-
     /* radbias and alpharadbias used for radpower calculation */
     protected static final int radbiasshift = 8;
     protected static final int radbias = (((int) 1) << radbiasshift);
     protected static final int alpharadbshift = (alphabiasshift + radbiasshift);
     protected static final int alpharadbias = (((int) 1) << alpharadbshift);
+    protected int alphadec; /* biased by 10 bits */
 
 	/* Types and Global Variables
 	-------------------------- */
-
     protected byte[] thepicture; /* the input image itself */
     protected int lengthcount; /* lengthcount = H*W*3 */
 
@@ -90,7 +86,8 @@ public class Quant
 
     /* Initialise network in range (0,0,0) to (255,255,255) and set parameters
        ----------------------------------------------------------------------- */
-    public Quant(byte[] thepic, int len, int sample) {
+    public Quant(byte[] thepic, int len, int sample)
+    {
 
         int i;
         int[] p;
@@ -100,7 +97,8 @@ public class Quant
         samplefac = sample;
 
         network = new int[netsize][];
-        for (i = 0; i < netsize; i++) {
+        for (i = 0; i < netsize; i++)
+        {
             network[i] = new int[4];
             p = network[i];
             p[0] = p[1] = p[2] = (i << (netbiasshift + 8)) / netsize;
@@ -109,13 +107,15 @@ public class Quant
         }
     }
 
-    public byte[] colorMap() {
+    public byte[] colorMap()
+    {
         byte[] map = new byte[3 * netsize];
         int[] index = new int[netsize];
         for (int i = 0; i < netsize; i++)
             index[network[i][3]] = i;
         int k = 0;
-        for (int i = 0; i < netsize; i++) {
+        for (int i = 0; i < netsize; i++)
+        {
             int j = index[i];
             map[k++] = (byte) (network[j][0]);
             map[k++] = (byte) (network[j][1]);
@@ -126,7 +126,8 @@ public class Quant
 
     /* Insertion sort of network and building of netindex[0..255] (to do after unbias)
        ------------------------------------------------------------------------------- */
-    public void inxbuild() {
+    public void inxbuild()
+    {
 
         int i, j, smallpos, smallval;
         int[] p;
@@ -135,21 +136,25 @@ public class Quant
 
         previouscol = 0;
         startpos = 0;
-        for (i = 0; i < netsize; i++) {
+        for (i = 0; i < netsize; i++)
+        {
             p = network[i];
             smallpos = i;
             smallval = p[1]; /* index on g */
 			/* find smallest in i..netsize-1 */
-            for (j = i + 1; j < netsize; j++) {
+            for (j = i + 1; j < netsize; j++)
+            {
                 q = network[j];
-                if (q[1] < smallval) { /* index on g */
+                if (q[1] < smallval)
+                { /* index on g */
                     smallpos = j;
                     smallval = q[1]; /* index on g */
                 }
             }
             q = network[smallpos];
 			/* swap p (i) and q (smallpos) entries */
-            if (i != smallpos) {
+            if (i != smallpos)
+            {
                 j = q[0];
                 q[0] = p[0];
                 p[0] = j;
@@ -164,7 +169,8 @@ public class Quant
                 p[3] = j;
             }
 			/* smallval entry is now in position i */
-            if (smallval != previouscol) {
+            if (smallval != previouscol)
+            {
                 netindex[previouscol] = (startpos + i) >> 1;
                 for (j = previouscol + 1; j < smallval; j++)
                     netindex[j] = i;
@@ -179,7 +185,8 @@ public class Quant
 
     /* Main Learning Loop
        ------------------ */
-    public void learn() {
+    public void learn()
+    {
 
         int i, j, b, g, r;
         int radius, rad, alpha, step, delta, samplepixels;
@@ -201,8 +208,7 @@ public class Quant
         if (rad <= 1)
             rad = 0;
         for (i = 0; i < rad; i++)
-            radpower[i] =
-                    alpha * (((rad * rad - i * i) * radbias) / (rad * rad));
+            radpower[i] = alpha * (((rad * rad - i * i) * radbias) / (rad * rad));
 
         //fprintf(stderr,"beginning 1D learning: initial radius=%d\n", rad);
 
@@ -210,10 +216,12 @@ public class Quant
             step = 3;
         else if ((lengthcount % prime1) != 0)
             step = 3 * prime1;
-        else {
+        else
+        {
             if ((lengthcount % prime2) != 0)
                 step = 3 * prime2;
-            else {
+            else
+            {
                 if ((lengthcount % prime3) != 0)
                     step = 3 * prime3;
                 else
@@ -222,7 +230,8 @@ public class Quant
         }
 
         i = 0;
-        while (i < samplepixels) {
+        while (i < samplepixels)
+        {
             b = (p[pix + 0] & 0xff) << netbiasshift;
             g = (p[pix + 1] & 0xff) << netbiasshift;
             r = (p[pix + 2] & 0xff) << netbiasshift;
@@ -239,15 +248,15 @@ public class Quant
             i++;
             if (delta == 0)
                 delta = 1;
-            if (i % delta == 0) {
+            if (i % delta == 0)
+            {
                 alpha -= alpha / alphadec;
                 radius -= radius / radiusdec;
                 rad = radius >> radiusbiasshift;
                 if (rad <= 1)
                     rad = 0;
                 for (j = 0; j < rad; j++)
-                    radpower[j] =
-                            alpha * (((rad * rad - j * j) * radbias) / (rad * rad));
+                    radpower[j] = alpha * (((rad * rad - j * j) * radbias) / (rad * rad));
             }
         }
         //fprintf(stderr,"finished 1D learning: final alpha=%f !\n",((float)alpha)/initalpha);
@@ -255,7 +264,8 @@ public class Quant
 
     /* Search for BGR values 0..255 (after net is unbiased) and return colour index
        ---------------------------------------------------------------------------- */
-    public int map(int b, int g, int r) {
+    public int map(int b, int g, int r)
+    {
 
         int i, j, dist, a, bestd;
         int[] p;
@@ -266,13 +276,16 @@ public class Quant
         i = netindex[g]; /* index on g */
         j = i - 1; /* start at netindex[g] and work outwards */
 
-        while ((i < netsize) || (j >= 0)) {
-            if (i < netsize) {
+        while ((i < netsize) || (j >= 0))
+        {
+            if (i < netsize)
+            {
                 p = network[i];
                 dist = p[1] - g; /* inx key */
                 if (dist >= bestd)
                     i = netsize; /* stop iter */
-                else {
+                else
+                {
                     i++;
                     if (dist < 0)
                         dist = -dist;
@@ -280,24 +293,28 @@ public class Quant
                     if (a < 0)
                         a = -a;
                     dist += a;
-                    if (dist < bestd) {
+                    if (dist < bestd)
+                    {
                         a = p[2] - r;
                         if (a < 0)
                             a = -a;
                         dist += a;
-                        if (dist < bestd) {
+                        if (dist < bestd)
+                        {
                             bestd = dist;
                             best = p[3];
                         }
                     }
                 }
             }
-            if (j >= 0) {
+            if (j >= 0)
+            {
                 p = network[j];
                 dist = g - p[1]; /* inx key - reverse dif */
                 if (dist >= bestd)
                     j = -1; /* stop iter */
-                else {
+                else
+                {
                     j--;
                     if (dist < 0)
                         dist = -dist;
@@ -305,12 +322,14 @@ public class Quant
                     if (a < 0)
                         a = -a;
                     dist += a;
-                    if (dist < bestd) {
+                    if (dist < bestd)
+                    {
                         a = p[2] - r;
                         if (a < 0)
                             a = -a;
                         dist += a;
-                        if (dist < bestd) {
+                        if (dist < bestd)
+                        {
                             bestd = dist;
                             best = p[3];
                         }
@@ -320,7 +339,9 @@ public class Quant
         }
         return (best);
     }
-    public byte[] process() {
+
+    public byte[] process()
+    {
         learn();
         unbiasnet();
         inxbuild();
@@ -329,11 +350,13 @@ public class Quant
 
     /* Unbias network to give byte values 0..255 and record position i to prepare for sort
        ----------------------------------------------------------------------------------- */
-    public void unbiasnet() {
+    public void unbiasnet()
+    {
 
         int i;// j;
 
-        for (i = 0; i < netsize; i++) {
+        for (i = 0; i < netsize; i++)
+        {
             network[i][0] >>= netbiasshift;
             network[i][1] >>= netbiasshift;
             network[i][2] >>= netbiasshift;
@@ -343,7 +366,8 @@ public class Quant
 
     /* Move adjacent neurons by precomputed alpha*(1-((i-j)^2/[r]^2)) in radpower[|i-j|]
        --------------------------------------------------------------------------------- */
-    protected void alterneigh(int rad, int i, int b, int g, int r) {
+    protected void alterneigh(int rad, int i, int b, int g, int r)
+    {
 
         int j, k, lo, hi, a, m;
         int[] p;
@@ -358,24 +382,33 @@ public class Quant
         j = i + 1;
         k = i - 1;
         m = 1;
-        while ((j < hi) || (k > lo)) {
+        while ((j < hi) || (k > lo))
+        {
             a = radpower[m++];
-            if (j < hi) {
+            if (j < hi)
+            {
                 p = network[j++];
-                try {
+                try
+                {
                     p[0] -= (a * (p[0] - b)) / alpharadbias;
                     p[1] -= (a * (p[1] - g)) / alpharadbias;
                     p[2] -= (a * (p[2] - r)) / alpharadbias;
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                 } // prevents 1.3 miscompilation
             }
-            if (k > lo) {
+            if (k > lo)
+            {
                 p = network[k--];
-                try {
+                try
+                {
                     p[0] -= (a * (p[0] - b)) / alpharadbias;
                     p[1] -= (a * (p[1] - g)) / alpharadbias;
                     p[2] -= (a * (p[2] - r)) / alpharadbias;
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                 }
             }
         }
@@ -383,7 +416,8 @@ public class Quant
 
     /* Move neuron i towards biased (b,g,r) by factor alpha
        ---------------------------------------------------- */
-    protected void altersingle(int alpha, int i, int b, int g, int r) {
+    protected void altersingle(int alpha, int i, int b, int g, int r)
+    {
 
 		/* alter hit neuron */
         int[] n = network[i];
@@ -394,7 +428,8 @@ public class Quant
 
     /* Search for biased BGR values
        ---------------------------- */
-    protected int contest(int b, int g, int r) {
+    protected int contest(int b, int g, int r)
+    {
 
 		/* finds closest neuron (min dist) and updates freq */
 		/* finds best neuron (min dist-bias) and returns position */
@@ -410,7 +445,8 @@ public class Quant
         bestpos = -1;
         bestbiaspos = bestpos;
 
-        for (i = 0; i < netsize; i++) {
+        for (i = 0; i < netsize; i++)
+        {
             n = network[i];
             dist = n[0] - b;
             if (dist < 0)
@@ -423,12 +459,14 @@ public class Quant
             if (a < 0)
                 a = -a;
             dist += a;
-            if (dist < bestd) {
+            if (dist < bestd)
+            {
                 bestd = dist;
                 bestpos = i;
             }
             biasdist = dist - ((bias[i]) >> (intbiasshift - netbiasshift));
-            if (biasdist < bestbiasd) {
+            if (biasdist < bestbiasd)
+            {
                 bestbiasd = biasdist;
                 bestbiaspos = i;
             }
